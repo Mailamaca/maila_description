@@ -2,7 +2,7 @@
 
 This package contains the Xacro macro describing the Maila geometry
 
-![maila](_media/rviz.png =250x)
+<img src="_media/rviz.png" alt="maila" height="250"/>
 
 ## Usage
 
