@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="steering_wheel">
+  
+  <xacro:include filename="$(find maila_description)/urdf/components/wheel.xacro" />
+
+  <xacro:macro name="steering_wheel"  params="connected_to id:='steering_wheel' *origin">
+    <!-- Add joint -->    
+    <joint name="${id}_steering_joint" type="revolute">
+      <parent link="${connected_to}"/>
+      <child link="${id}_steering_link"/>
+      <xacro:insert_block name="origin" />
+      <axis xyz="0 0 1"/>
+      <limit effort="30" velocity="60.0" lower="-${pi}/3" upper="${pi}/3"/> 
+    </joint>
+
+
+    <link name="${id}_steering_link">
+      <inertial>
+        <mass value="1"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="0.004" ixy="0.0" ixz="0.0" iyy="0.004" iyz="0.0" izz="0.004"/>
+      </inertial>
+    </link>
+
+    <xacro:wheel id="${id}" connected_to="${id}_steering_link">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:wheel>
+
+  </xacro:macro>
+
+</robot>

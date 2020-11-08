@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="maila">
+  <!-- Source -->
+  <!-- https://github.com/osrf/car_demo --> 
+  <!-- Wheel -->
+  <xacro:include filename="$(find maila_description)/urdf/components/wheel.xacro" />  
+  <xacro:include filename="$(find maila_description)/urdf/components/steering_wheel.xacro" />  
+
+  <!-- Macro -->   
+  <xacro:macro name="maila" params="connected_to=''">    
+    <link name="base_link">
+      <inertial>
+      <mass value="1"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+      </inertial>
+    </link>
+    <joint name="base_link_connection" type="fixed">
+      <parent link="base_link"/>
+      <child link="chassis"/>
+      <origin xyz="1.45 0 0" rpy="0 0 1.57"/>
+      <axis xyz="1 0 0"/>
+    </joint>
+
+    <link name="chassis">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://maila_description/urdf/meshes/hybrid_body.obj" scale="0.01 0.01 0.01"/>
+        </geometry>
+      </visual>
+      <inertial>
+        <mass value="1356.0"/>
+        <origin xyz="0 0 0.48" rpy="0 0 1.5708"/>
+        <inertia ixx="2581.13354740" ixy="0.0" ixz="0.0" iyy="591.30846112" iyz="0.0" izz="2681.95008628"/>
+      </inertial>
+    </link>
+
+    <!-- front wheels -->
+    <xacro:steering_wheel id="front_left" connected_to="chassis">
+      <origin xyz="0.767 -1.41 0.3" rpy="0 0 0"/>
+    </xacro:steering_wheel>
+    <xacro:steering_wheel id="front_right" connected_to="chassis">
+      <origin xyz="-0.767 -1.41 0.3" rpy="0 0 0"/>
+    </xacro:steering_wheel>
+    
+    <!-- rear wheels -->
+    <xacro:wheel id="rear_left" connected_to="chassis">
+      <origin xyz="0.793 1.45 0.3" rpy="0 0 0"/>
+    </xacro:wheel>        
+    <xacro:wheel id="rear_right" connected_to="chassis">
+      <origin xyz="-0.793 1.45 0.3" rpy="0 0 0"/>
+    </xacro:wheel>
+  </xacro:macro>
+ 
+</robot>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="maila">
+  <!-- Source -->
+  <!-- https://github.com/osrf/car_demo -->    
+   
+  <xacro:include filename="$(find maila_description)/urdf/maila.xacro" />  
+  <xacro:maila/>
+</robot>
