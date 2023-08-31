@@ -1,67 +1,45 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.conditions import UnlessCondition, IfCondition
-from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import Command, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
+DEFAULT_LOG_LEVEL = "info"
 
-def generate_launch_description():
+
+def generate_launch_description() -> LaunchDescription:
     # Get default config file.
-    pkg_share = FindPackageShare(package='maila_description')
-    model_path = PathJoinSubstitution([pkg_share, 'urdf', 'description.urdf'])
-    config_path = PathJoinSubstitution([pkg_share, 'rviz', 'only_robotmodel.rviz'])
-
-    # Create the launch configuration variables
-    declare_joint_gui_cmd = DeclareLaunchArgument(
-        name='gui',
-        default_value='False',
-        description='Flag to enable joint_state_publisher_gui'
-    )
-    declare_rviz_gui_cmd = DeclareLaunchArgument(
-        name='rviz',
-        default_value='False',
-        description='Flag to enable the rviz visualization of the model.'
+    description_pkg_share = FindPackageShare(package="maila_description")
+    model_description_path = PathJoinSubstitution(
+        [description_pkg_share, "urdf", "description.urdf"]
     )
 
-    # Specify the actions
-    robot_state_publisher_node = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        parameters=[{'robot_description': Command(['xacro ', model_path])}]
+    # Declare arguments commands.
+    declare_log_level_cmd = DeclareLaunchArgument(
+        "log_level", default_value=DEFAULT_LOG_LEVEL, description="log level"
     )
-    joint_state_publisher_node = Node(
-        package='joint_state_publisher',
-        executable='joint_state_publisher',
-        name='joint_state_publisher',
-        condition=UnlessCondition(LaunchConfiguration('gui'))
-    )
-    joint_state_publisher_gui_node = Node(
-        package='joint_state_publisher_gui',
-        executable='joint_state_publisher_gui',
-        name='joint_state_publisher_gui',
-        condition=IfCondition(LaunchConfiguration('gui'))
-    )
-    rviz_node = Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        output='screen',
-        arguments=['-d', config_path],
-        condition=IfCondition(LaunchConfiguration('rviz'))
+
+    # Robot state publisher
+    robot_state_publisher = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        namespace="",
+        output="both",
+        parameters=[
+            {
+                "robot_description": Command(["xacro ", model_description_path]),
+                "publish_frequency": 30.0,
+            }
+        ],
     )
 
     # Create the launch description and populate
     ld = LaunchDescription()
 
     # Declare the launch options
-    ld.add_action(declare_joint_gui_cmd)
-    ld.add_action(declare_rviz_gui_cmd)
+    ld.add_action(declare_log_level_cmd)
 
     # Add the action to launch the node
-    ld.add_action(joint_state_publisher_node)
-    ld.add_action(joint_state_publisher_gui_node)
-    ld.add_action(robot_state_publisher_node)
-    ld.add_action(rviz_node)
+    ld.add_action(robot_state_publisher)
 
     return ld
