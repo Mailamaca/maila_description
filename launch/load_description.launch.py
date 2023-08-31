@@ -11,7 +11,7 @@ def generate_launch_description() -> LaunchDescription:
     # Get default config file.
     description_pkg_share = FindPackageShare(package="maila_description")
     model_description_path = PathJoinSubstitution(
-        [description_pkg_share, "urdf", "description.urdf"]
+        [description_pkg_share, "urdf", "description.urdf.xacro"]
     )
 
     # Declare arguments commands.

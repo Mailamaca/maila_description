@@ -1,4 +1,4 @@
-# maila_description
+1# maila_description
 
 ## Description
 This package holds the urdf description of the robot.
@@ -17,6 +17,10 @@ For launching the robot state publisher and providing some visualization with rv
 ros2 launch maila_description view_maila.launch.py
 ```
 
+## TODO
+
+* Maila is bigger than the one descripted here. Make it bigger!
+* Xacros allows to load parameter from a yaml (see https://github.com/Ekumen-OS/andino/blob/humble/andino_description/urdf/andino.urdf.xacro#L7 ). Can we leverage this to extract relevant information from the xacro?
 
 #### References:
  * https://github.com/mlab-upenn/racecar-simulator
