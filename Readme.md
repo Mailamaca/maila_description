@@ -1,4 +1,4 @@
-1# maila_description
+# maila_description
 
 ## Description
 This package holds the urdf description of the robot.
